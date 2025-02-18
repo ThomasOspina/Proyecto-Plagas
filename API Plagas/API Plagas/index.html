@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Respuesta</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>API enfermedades y plagas</h1>
+    <div class="file-container">
+        <label for="imageInput">Seleccionar imagen</label>
+        <input type="file" id="imageInput" accept="image/*" />
+    </div>
+    <div id="imagePreview">
+        <img id="previewImage" src="" />
+    </div>
+    <div id="response">
+        <div class="divrespuesta"><label>Nombre de la planta:</label> <span id="cropName"></span></div>
+        <div class="divrespuesta"><label>Nombre cientifico (Planta):</label> <span id="scientificName"></span></div>
+        <div class="divrespuesta"><label>Enfermedad:</label> <span id="diseaseName"></span></div>
+        <div class="divrespuesta"><label>Nombre cientifico (Enfermedad):</label> <span id="scientificNameDisease"></span></div>
+    </div>
+    <button id="botonIdent">Identificar</button>
+    <a href="https://www.kindwise.com/crop-health" class="boton">Ir a la api de enfermedades</a>
+
+    <script type="module" src="solicitud.js"></script>
+</body>
+</html>
+

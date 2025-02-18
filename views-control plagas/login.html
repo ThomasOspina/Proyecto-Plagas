@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+    <section class="seccion-login">
+        <div class="contenedor-login">
+            <form class="formulario-login" action="dashboard.html">
+                <p class="title">Iniciar sesión</p>
+                <div class="input-container">
+                    <input placeholder="Cédula" class="cedula" type="text" />
+                    <span class="error-cedula error" role="alert"></span>
+                </div>
+                <div class="input-container">
+                    <input placeholder="Contraseña" class="contraseña" type="password" />
+                    <span class="error-contraseña error" role="alert"></span>
+                </div>
+                <button class="boton-login" type="submit">Ingresar</button>
+            </form>
+        </div>
+        <div class="contenedor-logo">
+            <img class="logo" src="img/LOGO-CONTROLDEPLAGAS.PNG" alt="" />
+        </div>
+    </section>
+    <script src="validacion-login.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Técnico - Gestión de Lotes</title>
+    <link rel="stylesheet" href="tecnico-dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="navbar">
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h1>Dashboard del Técnico</h1>
+    </div>
+
+    <nav class="sidebar" id="sidebar">
+      <ul>
+        <li>
+          <a href="#ver-lotes" onclick="mostrarSeccion('ver-lotes-section')"
+            ><i class="fas fa-eye"></i> Ver Lotes</a
+          >
+        </li>
+        <li>
+          <a
+            href="#ver-siembras"
+            onclick="mostrarSeccion('ver-siembras-section')"
+            ><i class="fas fa-eye"></i> Ver Siembras</a
+          >
+        </li>
+        <li>
+          <a
+            href="#planificar-tratamiento"
+            onclick="mostrarSeccion('tratamiento-section')"
+            ><i class="fas fa-calendar-check"></i> Planificación de
+            Tratamiento</a
+          >
+        </li>
+        <li>
+          <a href="#ver-informes" onclick="mostrarSeccion('informes-section')"
+            ><i class="fas fa-file-alt"></i> Ver Informes</a
+          >
+        </li>
+        <li>
+          <a
+            href="#configuraciones"
+            onclick="mostrarSeccion('configuraciones-section')"
+          >
+            <i class="fas fa-cogs"></i> Configuraciones
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="content" id="content">
+      <section class="ver-lotes-section" style="display: none">
+        <h2>Ver Lotes</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Número de Lote</th>
+              <th>Descripción</th>
+              <th>Fecha de Creación</th>
+              <th>Ubicación</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="lotesTableBody">
+            <!-- Las filas se llenarán dinámicamente -->
+          </tbody>
+        </table>
+        <h3>Registrar Nuevo Lote</h3>
+        <form
+          id="loteFormVer"
+          onsubmit="registrarLoteDesdeVer(); return false;"
+        >
+          <input
+            type="text"
+            id="numeroLoteInputVer"
+            placeholder="Número de Lote"
+            required
+          />
+          <input
+            type="text"
+            id="descripcionInputVer"
+            placeholder="Descripción"
+            required
+          />
+          <input type="date" id="fechaCreacionInputVer" required />
+          <input
+            type="text"
+            id="ubicacionLoteInputVer"
+            placeholder="Ubicación"
+            required
+          />
+          <select id="estadoLoteInputVer" required>
+            <option value="" disabled selected>Selecciona un estado</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+          <button type="submit">Registrar Lote</button>
+        </form>
+      </section>
+
+      <section class="ver-siembras-section" style="display: none">
+        <h2>Ver Siembras</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha de Siembra</th>
+              <th>Cantidad de Plantas</th>
+              <th>Tipo de Planta</th>
+              <th>Ubicación</th>
+              <th>Número de Lote</th>
+            </tr>
+          </thead>
+          <tbody id="siembrasTableBody">
+            <!-- Las filas se llenarán dinámicamente -->
+          </tbody>
+        </table>
+        <h3>Registrar Nueva Siembra</h3>
+        <form
+          id="siembraFormVer"
+          onsubmit="registrarSiembraDesdeVer(); return false;"
+        >
+          <label for="fechaSiembraInputVer">Fecha de Siembra:</label>
+          <input type="date" id="fechaSiembraInputVer" required />
+          <label for="cantidadPlantasInputVer">Cantidad de Plantas:</label>
+          <input
+            type="number"
+            id="cantidadPlantasInputVer"
+            placeholder="Cantidad de Plantas"
+            required
+          />
+          <label for="tipoPlantaInputVer">Tipo de Planta:</label>
+          <select id="tipoPlantaInputVer" required>
+            <option value="Plátano">Plátano</option>
+          </select>
+          <label for="ubicacionInputVer">Ubicación:</label>
+          <input
+            type="text"
+            id="ubicacionInputVer"
+            placeholder="Ubicación"
+            required
+          />
+          <label for="numeroLoteSiembraInputVer">Número de Lote:</label>
+          <input
+            type="text"
+            id="numeroLoteSiembraInputVer"
+            placeholder="Número de Lote"
+            required
+          />
+          <button type="submit">Registrar Siembra</button>
+        </form>
+      </section>
+
+      <section class="tratamiento-section" style="display: none">
+        <h2>Planificar Tratamiento</h2>
+        <form
+          id="tratamientoForm"
+          onsubmit="planificarTratamiento(); return false;"
+        >
+          <input type="date" id="fechaTratamientoInput" required />
+          <input
+            type="text"
+            id="descripcionTratamientoInput"
+            placeholder="Descripción del Tratamiento"
+            required
+          />
+          <button type="submit">Planificar Tratamiento</button>
+        </form>
+      </section>
+
+      <section class="informes-section" style="display: none">
+        <h2>Ver Informes de la API</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Informe</th>
+            </tr>
+          </thead>
+          <tbody id="informesTableBody">
+            <tr>
+              <td>2024-10-10</td>
+              <td>Sin plagas detectadas en el Lote 1.</td>
+            </tr>
+            <tr>
+              <td>2024-10-12</td>
+              <td>
+                Plaga leve detectada en el Lote 2, tratamiento recomendado.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="configuraciones-section" style="display: none">
+        <h2>Configuraciones</h2>
+        <form
+          id="configuracionForm"
+          onsubmit="guardarConfiguracion(); return false;"
+        >
+          <label for="idiomaInput">Idioma:</label>
+          <select id="idiomaInput" required>
+            <option value="es">Español</option>
+            <option value="en">Inglés</option>
+          </select>
+
+          <label for="notificacionesInput">Notificaciones:</label>
+          <input type="checkbox" id="notificacionesInput" />
+
+          <label for="visualizacionInput">Preferencias de Visualización:</label>
+          <select id="visualizacionInput" required>
+            <option value="lista">Lista</option>
+            <option value="cuadrícula">Cuadrícula</option>
+          </select>
+
+          <button type="submit">Guardar Configuración</button>
+        </form>
+      </section>
+    </div>
+
+    <script>
+      let lotes = [];
+      let siembras = [];
+
+      function mostrarSeccion(section) {
+        const sections = [
+          "ver-lotes-section",
+          "ver-siembras-section",
+          "tratamiento-section",
+          "informes-section",
+          "configuraciones-section",
+        ];
+
+        sections.forEach((sec) => {
+          document.querySelector(`.${sec}`).style.display =
+            sec === section ? "block" : "none";
+        });
+        if (section === "ver-lotes-section") {
+          verLotes();
+        } else if (section === "ver-siembras-section") {
+          verSiembras();
+        }
+      }
+
+      function registrarLoteDesdeVer() {
+        const numeroLote = document.getElementById("numeroLoteInputVer").value;
+        const descripcion = document.getElementById(
+          "descripcionInputVer"
+        ).value;
+        const fechaCreacion = document.getElementById(
+          "fechaCreacionInputVer"
+        ).value;
+        const ubicacion = document.getElementById(
+          "ubicacionLoteInputVer"
+        ).value;
+        const estado = document.getElementById("estadoLoteInputVer").value;
+
+        lotes.push({
+          numeroLote,
+          descripcion,
+          fechaCreacion,
+          ubicacion,
+          estado,
+        });
+        alert("Lote registrado exitosamente desde la sección Ver Lotes.");
+        document.getElementById("loteFormVer").reset();
+        verLotes();
+      }
+
+      function verLotes() {
+        const lotesTableBody = document.getElementById("lotesTableBody");
+        lotesTableBody.innerHTML = "";
+
+        lotes.forEach((lote) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${lote.numeroLote}</td>
+                    <td>${lote.descripcion}</td>
+                    <td>${lote.fechaCreacion}</td>
+                    <td>${lote.ubicacion}</td>
+                    <td>${lote.estado}</td>
+                `;
+          lotesTableBody.appendChild(row);
+        });
+      }
+
+      function registrarSiembraDesdeVer() {
+        const fechaSiembra = document.getElementById(
+          "fechaSiembraInputVer"
+        ).value;
+        const cantidad = document.getElementById(
+          "cantidadPlantasInputVer"
+        ).value;
+        const tipo = document.getElementById("tipoPlantaInputVer").value;
+        const ubicacion = document.getElementById("ubicacionInputVer").value;
+        const numeroLote = document.getElementById(
+          "numeroLoteSiembraInputVer"
+        ).value;
+
+        siembras.push({ fechaSiembra, cantidad, tipo, ubicacion, numeroLote });
+        alert("Siembra registrada exitosamente desde la sección Ver Siembras.");
+        document.getElementById("siembraFormVer").reset();
+        verSiembras();
+      }
+
+      function verSiembras() {
+        const siembrasTableBody = document.getElementById("siembrasTableBody");
+        siembrasTableBody.innerHTML = "";
+
+        siembras.forEach((siembra) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${siembra.fechaSiembra}</td>
+                    <td>${siembra.cantidad}</td>
+                    <td>${siembra.tipo}</td>
+                    <td>${siembra.ubicacion}</td>
+                    <td>${siembra.numeroLote}</td>
+                `;
+          siembrasTableBody.appendChild(row);
+        });
+      }
+
+      function planificarTratamiento() {
+        alert("Tratamiento planificado exitosamente.");
+        document.getElementById("tratamientoForm").reset();
+      }
+
+      function guardarConfiguracion() {
+        const idioma = document.getElementById("idiomaInput").value;
+        const notificaciones = document.getElementById(
+          "notificacionesInput"
+        ).checked;
+        const visualizacion =
+          document.getElementById("visualizacionInput").value;
+
+        alert(
+          `Configuraciones guardadas:\nIdioma: ${idioma}\nNotificaciones: ${
+            notificaciones ? "Activadas" : "Desactivadas"
+          }\nVisualización: ${visualizacion}`
+        );
+        document.getElementById("configuracionForm").reset();
+      }
+
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("active");
+      }
+
+      mostrarSeccion("ver-lotes-section");
+    </script>
+  </body>
+</html>

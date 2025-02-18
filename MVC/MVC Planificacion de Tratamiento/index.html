@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Planificación de Tratamiento</title>
+</head>
+<body>
+    <form id="planificacionForm">
+        <label for="fechaInicio">Fecha de Inicio:</label>
+        <input type="date" id="fechaInicio" required>
+        
+        <label for="fechaFin">Fecha de Fin:</label>
+        <input type="date" id="fechaFin" required>
+        
+        <label for="informeTratamiento">Informe de Tratamiento:</label>
+        <textarea id="informeTratamiento" required></textarea>
+        
+        <button type="submit">Registrar Planificación</button>
+    </form>
+    <p id="message"></p>
+    <script src="registroPlanificacion.js"></script>
+</body>
+</html>
