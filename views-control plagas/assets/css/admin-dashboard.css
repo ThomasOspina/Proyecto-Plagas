@@ -34,8 +34,6 @@ body {
     padding: 20px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease;
-    position: fixed; /* Fija la barra lateral */
-    height: 100%; /* Asegura que ocupe toda la altura */
 }
 
 .sidebar.active {
@@ -71,9 +69,6 @@ body {
 .content {
     flex-grow: 1;
     padding: 20px;
-    margin-left: 280px; /* Espacio para la barra lateral */
-    margin-right: 20px; /* Espacio a la derecha */
-    margin-top: 20px; /* Espacio superior para separación */
     overflow-y: auto;
 }
 
@@ -86,10 +81,7 @@ form {
     flex-direction: column;
 }
 
-form input,
-form select,
-form button,
-form textarea {
+form input, form select, form button {
     margin-bottom: 10px;
     padding: 10px;
     border: none;
@@ -113,14 +105,11 @@ table {
     margin-top: 20px;
 }
 
-table,
-th,
-td {
+table, th, td {
     border: 1px solid #444;
 }
 
-th,
-td {
+th, td {
     padding: 10px;
     text-align: left;
 }
@@ -133,6 +122,24 @@ tbody tr:hover {
     background-color: #555;
 }
 
+.alerts-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.alerts-section li {
+    background-color: #555;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.alerts-section li:hover {
+    background-color: rgb(125, 180, 54);
+}
+
+/* Estilos para la sección de configuración */
 fieldset {
     border: 1px solid #444;
     padding: 10px;
@@ -150,3 +157,25 @@ legend {
     font-size: 12px;
     margin-top: 5px;
 }
+
+.statistics-section {
+    display: none;
+}
+
+.users-section {
+    display: none;
+}
+
+.settings-section {
+    display: none;
+}
+
+#feedback {
+    display: none;
+}
+
+
+
+
+
+
