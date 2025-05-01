@@ -1,6 +1,6 @@
 #CREACIÓN BASE DE DATOS
-create database ProjectoPlagas;
-use ProjectoPlagas;
+create database DB_Proyecto_Plagas;
+use DB_Proyecto_Plagas;
 #CREACIÓN TABLA USUARIO
 CREATE TABLE Usuario (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
@@ -51,7 +51,7 @@ CREATE TABLE ApiPlagas (
     nombrePlanta varchar(100) not null,
     nombreCientificoPlanta varchar(100) not null,
     enfermedadPlanta varchar(100) not null,
-    nombreCientificioEnfermedad varchar(100) not null,
+    nombreCientificoEnfermedad varchar(100) not null,
     reporteFotos_id int,
     FOREIGN KEY (ReporteFotos_id) REFERENCES ReporteFotos(id_reporteFotos)
 );
