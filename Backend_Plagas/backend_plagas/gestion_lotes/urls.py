@@ -1,9 +1,9 @@
-from rest_framework import routers
+from rest_framework.routers import DefaultRouter
 from .views import GestionLoteViewSet
 from django.urls import path, include
 
-router = routers.DefaultRouter()
-router.register(r'', GestionLoteViewSet)
+router = DefaultRouter()
+router.register(r'gestion_lote', GestionLoteViewSet, basename='gestion_lote')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -1,9 +1,9 @@
-from rest_framework import routers
+from rest_framework.routers import DefaultRouter
 from .views import MonitoreoPlagasViewSet
 from django.urls import path, include
 
-router = routers.DefaultRouter()
-router.register(r'', MonitoreoPlagasViewSet)
+router = DefaultRouter()
+router.register(r'monitoreo', MonitoreoPlagasViewSet, basename='monitoreo')
 
 urlpatterns = [
     path('', include(router.urls)),

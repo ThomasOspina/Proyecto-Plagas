@@ -2,6 +2,10 @@ from rest_framework import viewsets
 from .models import ApiPlagas
 from .serializers import ApiPlagasSerializer
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
 from django.http import JsonResponse
 from .crophealth_service import analizar_imagen_crophealth
 from reporte_fotos.models import ReporteFotos
@@ -12,30 +16,30 @@ class ApiPlagasViewSet(viewsets.ModelViewSet):
     serializer_class = ApiPlagasSerializer
 
 
-# Vista personalizada para consumir Crop.health y guardar resultados
+@api_view(['POST'])
 def guardar_diagnostico_crophealth(request):
-    reporte_id = request.GET.get('reporte_id')  # También puedes usar request.POST si es un formulario
+    reporte_id = request.data.get('reporteFotos')  # Cambiado para que sea compatible con POST JSON o form-data
 
     if not reporte_id:
-        return JsonResponse({'error': 'Debe proporcionar el ID del reporte'}, status=400)
+        return Response({'error': 'Debe proporcionar el ID del reporte'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         reporte = ReporteFotos.objects.get(id_reporteFotos=reporte_id)
-        imagen_path = f'media/{reporte.foto}'  # Asegúrate de que el path sea correcto según tu configuración
+        imagen_path = f'media/{reporte.foto}'  # Asegúrate de validar este path
     except ReporteFotos.DoesNotExist:
-        return JsonResponse({'error': 'Reporte no encontrado'}, status=404)
+        return Response({'error': 'Reporte no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
     data = analizar_imagen_crophealth(imagen_path)
 
     if not data or 'result' not in data:
-        return JsonResponse({'error': 'No se pudo procesar la imagen'}, status=400)
+        return Response({'error': 'No se pudo procesar la imagen'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         crop_suggestions = data['result']['crop'].get('suggestions', [])
         disease_suggestions = data['result']['disease'].get('suggestions', [])
 
         if not crop_suggestions or not disease_suggestions:
-            return JsonResponse({'error': 'No se encontraron sugerencias de cultivo o enfermedad'}, status=422)
+            return Response({'error': 'No se encontraron sugerencias válidas'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         crop = crop_suggestions[0]
         disease = disease_suggestions[0]
@@ -48,13 +52,14 @@ def guardar_diagnostico_crophealth(request):
             reporteFotos=reporte
         )
 
-        return JsonResponse({
+        return Response({
             'id_api': api_result.id_api,
             'planta': api_result.nombrePlanta,
             'enfermedad': api_result.enfermedadPlanta
-        })
+        }, status=status.HTTP_201_CREATED)
 
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
