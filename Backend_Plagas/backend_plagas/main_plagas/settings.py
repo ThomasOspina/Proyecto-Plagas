@@ -141,4 +141,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py
-CROPHEALTH_API_KEY = os.getenv("CROPHEALTH_API_KEY", "1jH98Kf3QpqfqQHfFWQUE4aspdCpnF7xRfrI9GsmvFbKE145sL")
+CROPHEALTH_API_KEY = os.getenv("CROPHEALTH_API_KEY", "8IEi4D93QNCwRNNk8wK6k5YowO9LBLrX79C0PGABJ0axJgM0Oc")
+CROPHEALTH_API_URL = "https://crop.kindwise.com/api/v1/identification"
