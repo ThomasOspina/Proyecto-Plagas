@@ -1,0 +1,107 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #212121;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+}
+
+.seccion-login {
+  display: flex;
+  flex-direction: row-reverse;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: #212121;
+  
+}
+
+.contenedor-logo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 600px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+ 
+
+  
+}
+.contenedor-login {
+ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+  width: 500px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+ 
+}
+
+.logo {
+  width: 100%;
+  height: 500px;
+  border-radius: 0.5rem;
+ 
+}
+
+.formulario-login {
+  width: 100%;
+  height: 500px;
+  padding: 3rem;
+  border-radius: 0.5rem;
+  background-image: linear-gradient(to bottom, #3a3a3a, #1f1f1f);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  color: rgb(125, 180, 54);
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+
+.input-cedula{
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgb(125, 180, 54);
+}
+
+.input-password {
+  border-bottom: 1px solid rgb(125, 180, 54);
+}
+
+.boton-login {
+  width: 100%;
+  margin-top: 5rem;
+  padding: 1rem;
+  background-color: #363636;
+  color: rgb(125, 180, 54);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgb(125, 180, 54);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.boton-login:hover {
+  background-color: rgb(125, 180, 54);
+  color: #000;
+  box-shadow: 0 0 10px #000;
+}
+
+.error {
+  margin-top: 0.5rem;
+  color: #ff4c4c;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
