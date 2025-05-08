@@ -3,7 +3,7 @@ from .views import PlanificacionTratamientoViewSet
 from django.urls import path, include
 
 router = DefaultRouter()
-router.register(r'tratamientos', PlanificacionTratamientoViewSet, basename='tratamientos')
+router.register(r'', PlanificacionTratamientoViewSet, basename='tratamientos')
 
 urlpatterns = [
     path('', include(router.urls)),

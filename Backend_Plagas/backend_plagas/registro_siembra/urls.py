@@ -3,7 +3,7 @@ from .views import RegistroSiembraViewSet
 from django.urls import path, include
 
 router = DefaultRouter()
-router.register(r'registro_siembra', RegistroSiembraViewSet, basename='registro_siembra')
+router.register(r'', RegistroSiembraViewSet, basename='registro_siembra')
 urlpatterns = [
     path('', include(router.urls)),
 ]

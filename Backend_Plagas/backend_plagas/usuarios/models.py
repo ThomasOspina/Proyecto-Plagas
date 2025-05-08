@@ -7,6 +7,7 @@ class Usuario(models.Model):
     correo = models.EmailField(max_length=100)
     telefono = models.CharField(max_length=20)
     rol = models.CharField(max_length=50)
+    contraseña = models.CharField(max_length=128)
 
     class Meta:
         managed = False

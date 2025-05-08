@@ -3,7 +3,7 @@ from .views import UsuarioViewSet
 from django.urls import path, include
 
 router = DefaultRouter()
-router.register(r'usuarios', UsuarioViewSet, basename='usuario')
+router.register(r'', UsuarioViewSet, basename='usuario')
 
 urlpatterns = [
     path('', include(router.urls)),

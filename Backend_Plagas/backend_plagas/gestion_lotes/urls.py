@@ -3,7 +3,7 @@ from .views import GestionLoteViewSet
 from django.urls import path, include
 
 router = DefaultRouter()
-router.register(r'gestion_lote', GestionLoteViewSet, basename='gestion_lote')
+router.register(r'', GestionLoteViewSet, basename='gestion_lote')
 
 urlpatterns = [
     path('', include(router.urls)),
