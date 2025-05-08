@@ -8,7 +8,8 @@ CREATE TABLE Usuario (
     apellido VARCHAR(75),
     correo VARCHAR(100),
     telefono VARCHAR(20),
-    rol VARCHAR(50)
+    rol VARCHAR(50),
+    contraseña varchar(128)
 );
 #CREACIÓN TABLA REGISTRO SIEMBRA
 CREATE TABLE RegistroSiembra (
