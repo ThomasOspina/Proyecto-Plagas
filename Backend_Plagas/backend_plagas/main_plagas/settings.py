@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     #API REST
     'rest_framework',
 
+    'corsheaders'
+
     #My apps
     'usuarios',
     'gestion_lotes',
@@ -50,7 +52,8 @@ INSTALLED_APPS = [
     'apiplagas',
     'tratamientos',
     'reporte_fotos',
-    'registro_siembra'
+    'registro_siembra',
+    'loginAutenticado',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +64,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'main_plagas.urls'
@@ -143,3 +148,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # settings.py
 CROPHEALTH_API_KEY = os.getenv("CROPHEALTH_API_KEY", "8IEi4D93QNCwRNNk8wK6k5YowO9LBLrX79C0PGABJ0axJgM0Oc")
 CROPHEALTH_API_URL = "https://crop.kindwise.com/api/v1/identification"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+CORS_ALLOW_ALL_ORIGINS = True 
+

@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/reporte-fotos/', include('reporte_fotos.urls')),
     path('api/api-plagas/', include('apiplagas.urls')),
     path('api/planificacion-tratamiento/', include('tratamientos.urls')),
+    path('api/auth/', include('loginAutenticado.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
