@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     #API REST
     'rest_framework',
 
-    'corsheaders'
+    'corsheaders',
 
     #My apps
     'usuarios',
