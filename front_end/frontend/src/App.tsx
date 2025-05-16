@@ -14,6 +14,8 @@ import Informes from './components/tecnicoDashboard/informes';
 import NavbarTecnico from './components/tecnicoDashboard/navbarTecnico';
 import SidebarTecnico from './components/tecnicoDashboard/sidebarTecnico';
 import GestionLotes from './components/tecnicoDashboard/gestionLotes';
+import CampesinoView from './components/vistaCampesino/CampesinoView'; // ruta para la vista del campesino
+import LoginCampesino from './components/vistaCampesino/LoginCampesino'; // ruta para el login del campesino
 
 import './App.css';
 
@@ -21,7 +23,6 @@ const App: React.FC = () => {
   const [sidebarActive, setSidebarActive] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<'admin' | 'tecnico' | null>(null);
- 
 
   const toggleSidebar = () => {
     setSidebarActive(!sidebarActive);
@@ -34,58 +35,63 @@ const App: React.FC = () => {
 
   return (
     <div>
-      {!isLoggedIn ? (
-        <LoginForm onLoginSuccess={handleLoginSuccess} />
-      ) : (
-        <>
-          {userRole === 'admin' ? (
-            <>
-              <Navbar toggleSidebar={toggleSidebar} />
-              <div className="main-container">
-                <Sidebar 
-                isActive={sidebarActive}
-                onLogout={() => setIsLoggedIn(false)}
-                />
-                <div className="content">
-                  <Routes>
-                    <Route path="/" element={<Statistics />} />
-                    <Route path="/usuarios" element={<UserTable />} />
-                    <Route path="/agregar-usuario" element={<UserForm />} />
-                    <Route path="/estadisticas" element={<Statistics />} />
-                    <Route path="/ajustes" element={<Settings />} />
-                    <Route path="/informes" element={<Informes />} />
-                  </Routes>
+      <Routes>
+        {/* Vista pública para Campesino */}
+        <Route path="/campesino-login" element={<LoginCampesino />} />
+        <Route path="/campesino" element={<CampesinoView />} />
+
+
+        {/* Vistas protegidas: Admin y Técnico */}
+        {!isLoggedIn ? (
+          <Route path="*" element={<LoginForm onLoginSuccess={handleLoginSuccess} />} />
+        ) : userRole === 'admin' ? (
+          <Route
+            path="*"
+            element={
+              <>
+                <Navbar toggleSidebar={toggleSidebar} />
+                <div className="main-container">
+                  <Sidebar isActive={sidebarActive} onLogout={() => setIsLoggedIn(false)} />
+                  <div className="content">
+                    <Routes>
+                      <Route path="/" element={<Statistics />} />
+                      <Route path="/usuarios" element={<UserTable />} />
+                      <Route path="/agregar-usuario" element={<UserForm />} />
+                      <Route path="/estadisticas" element={<Statistics />} />
+                      <Route path="/ajustes" element={<Settings />} />
+                      <Route path="/informes" element={<Informes />} />
+                    </Routes>
+                  </div>
                 </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <NavbarTecnico toggleSidebar={toggleSidebar} />
-              <div className="main-container">
-                <SidebarTecnico
-                  isActive={sidebarActive}
-                  onLogout={() => setIsLoggedIn(false)}
-                />
-                <div className="content">
-                  <Routes>
-                    <Route path="/" element={<Lotes />} />
-                    <Route path="/gestionLotes" element={<GestionLotes />} />
-                    <Route path="/siembras" element={<Siembras />} />
-                    <Route path="/tratamientos" element={<Tratamientos />} />
-                    <Route path="/informes" element={<Informes />} />
-                    <Route path="/ajustes" element={<Settings />} />
-                  </Routes>
+              </>
+            }
+          />
+        ) : (
+          <Route
+            path="*"
+            element={
+              <>
+                <NavbarTecnico toggleSidebar={toggleSidebar} />
+                <div className="main-container">
+                  <SidebarTecnico isActive={sidebarActive} onLogout={() => setIsLoggedIn(false)} />
+                  <div className="content">
+                    <Routes>
+                      <Route path="/" element={<Lotes />} />
+                      <Route path="/gestionLotes" element={<GestionLotes />} />
+                      <Route path="/siembras" element={<Siembras />} />
+                      <Route path="/tratamientos" element={<Tratamientos />} />
+                      <Route path="/informes" element={<Informes />} />
+                      <Route path="/ajustes" element={<Settings />} />
+                    </Routes>
+                  </div>
                 </div>
-              </div>
-            </>
-          )}
-        </>
-      )}
+              </>
+            }
+          />
+        )}
+      </Routes>
     </div>
   );
 };
 
 export default App;
-
-
-

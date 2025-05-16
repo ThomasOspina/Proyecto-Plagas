@@ -105,3 +105,44 @@ body {
   text-align: center;
 }
 
+/* estilo para el boton total mente responsivo */
+
+.boton-campesino {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  color: white;
+  background-color: transparent;
+  border: 2px solid #363636;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgb(125, 180, 54);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.boton-campesino:hover {
+  background-color: #363636;
+  color: rgb(125, 180, 54);
+  box-shadow: 0 0 20px rgb(125, 180, 54);
+  transform: scale(1.05);
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .boton-campesino {
+    top: 0.5rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    box-shadow: 0 0 5px rgb(125, 180, 54);
+  }
+
+  .boton-campesino:hover {
+    transform: none;
+  }
+}
+

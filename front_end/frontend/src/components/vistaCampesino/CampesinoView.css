@@ -1,0 +1,55 @@
+.campesino-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  font-family: sans-serif;
+}
+
+.campesino-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.profile-icon {
+  font-size: 2rem;
+}
+
+.camera-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.camera-button {
+  font-size: 4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.send-button, .status-box {
+  padding: 0.7rem 1.5rem;
+  border: 1px solid #000;
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .campesino-container {
+    padding: 5rem;
+  }
+
+  .camera-button {
+    font-size: 6rem;
+  }
+
+  .send-button, .status-box {
+    font-size: 1.2rem;
+  }
+}

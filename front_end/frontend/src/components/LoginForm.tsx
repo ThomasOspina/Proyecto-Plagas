@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Necesario para redireccionar
 import '../styles/LoginForm.css';
 
 interface LoginFormProps {
@@ -8,6 +9,7 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   const [cedula, setCedula] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); //  Hook de React Router
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
 
   return (
     <section className="seccion-login">
+      {/* Botón de acceso para campesino */}
+      <button
+        className="boton-campesino"
+        onClick={() => navigate('/campesino-login')}
+      >
+        Campesino
+      </button>
+      
       <div className="contenedor-logo">
         <img src="/logo.png" alt="Logo" className="logo" />
       </div>
@@ -54,11 +64,3 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
 };
 
 export default LoginForm;
-
-
-
-
-
-
-
-
