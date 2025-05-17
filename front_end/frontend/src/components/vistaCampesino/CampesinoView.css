@@ -1,55 +1,136 @@
+/* Contenedor general */
 .campesino-container {
+  min-height: 100vh;
+  background-color: #121212;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
-  font-family: sans-serif;
+  padding: 3rem 1.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #f5f5f5;
 }
 
+/* Encabezado */
 .campesino-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.2rem;
+  gap: 0.75rem;
+  font-size: 1.3rem;
+  font-weight: 600;
   margin-bottom: 2rem;
+  color: #00c851;
 }
 
-.profile-icon {
-  font-size: 2rem;
+/* Ícono de usuario */
+.profile-icon,
+.icon {
+  width: 48px;
+  height: 48px;
+  color: #00c851;
 }
 
+/* Sección de cámara */
 .camera-section {
+  background-color: #1e1e1e;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 255, 100, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
 }
 
 .camera-button {
-  font-size: 4rem;
+  font-size: 0;
   background: none;
   border: none;
   cursor: pointer;
 }
 
-.send-button, .status-box {
-  padding: 0.7rem 1.5rem;
-  border: 1px solid #000;
-  background: transparent;
-  font-size: 1rem;
-  cursor: pointer;
+.camera-button svg {
+  width: 96px;
+  height: 96px;
+  color: #cccccc;
+  transition: transform 0.3s ease;
 }
 
+.camera-button svg:hover {
+  transform: scale(1.05);
+  color: #ffffff;
+}
+
+/* Botones */
+.send-button,
+.status-box {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.send-button {
+  background-color: #00c851;
+  border: none;
+  color: white;
+}
+
+.send-button:hover {
+  background-color: #009e3d;
+}
+
+.status-box {
+  background-color: transparent;
+  border: 1px solid #00c851;
+  color: #00c851;
+}
+
+.status-box:hover {
+  background-color: #00c851;
+  color: white;
+}
+
+/* Mensaje de éxito */
+.mensaje-exito {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #00c851;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 255, 100, 0.3);
+  animation: fadeInOut 3s ease;
+  text-align: center;
+}
+
+/* Animación */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.95); }
+  10% { opacity: 1; transform: scale(1); }
+  90% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.95); }
+}
+
+/* Responsive */
 @media (min-width: 768px) {
   .campesino-container {
     padding: 5rem;
   }
 
-  .camera-button {
-    font-size: 6rem;
+  .send-button,
+  .status-box {
+    font-size: 1.1rem;
   }
 
-  .send-button, .status-box {
-    font-size: 1.2rem;
+  .camera-button svg {
+    width: 120px;
+    height: 120px;
   }
 }
