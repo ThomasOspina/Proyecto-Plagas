@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
-
-
 import './CampesinoView.css';
 
 const CampesinoView = () => {
   const [registroEnviado, setRegistroEnviado] = useState(false);
-  
-    const handleEnviar = () => {
+  const [imagenes, setImagenes] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleEnviar = () => {
     setRegistroEnviado(true);
-    setTimeout(() => setRegistroEnviado(false), 3000); // Oculta el mensaje después de 3 segundos
+    setTimeout(() => setRegistroEnviado(false), 3000);
   };
+
+  const handleSeleccionImagenes = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setImagenes((prev) => [...prev, ...files]);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files).filter(file =>
+      file.type.startsWith('image/')
+    );
+    setImagenes((prev) => [...prev, ...files]);
+  };
+
   return (
     <div className="campesino-container">
       <header className="campesino-header">
-        <div className="campesino-header-left">
-          {/* SVG ICONO USER */}
+        <div className="campesino-profile">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             strokeWidth={1.5} stroke="currentColor" className="icon">
             <path strokeLinecap="round" strokeLinejoin="round"
@@ -25,20 +39,55 @@ const CampesinoView = () => {
       </header>
 
       <main className="campesino-main">
-        <div className="camera-card">
-          {/* SVG ICONO CÁMARA */}
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            strokeWidth={1.5} stroke="currentColor" className="icon">
-            <path strokeLinecap="round" strokeLinejoin="round"
-              d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
-            <path strokeLinecap="round" strokeLinejoin="round"
-              d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
-          </svg>
+        <div
+          className={`upload-card drop-zone ${isDragging ? 'dragging' : ''}`}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+        >
+          <h2 className="upload-title">Sube tu imágen del cultivo</h2>
 
-          <p className="camera-instruction">Captura la imagen del cultivo para analizar posibles anomalías</p>
-          <button className="primary-button" onClick={handleEnviar}>ENVIAR</button>
-          <button className="secondary-button">Sin anomalías</button>
-                    {/* Mensaje de confirmación */}
+          <label htmlFor="upload" className="upload-button">
+            Cargar imágenes
+            <input
+              id="upload"
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleSeleccionImagenes}
+              style={{ display: 'none' }}
+            />
+          </label>
+
+          <p className="upload-hint">o arrastra una imagen aquí</p>
+
+          {imagenes.length > 0 && (
+            <div className="preview-grid">
+              {imagenes.map((img, index) => (
+                <div key={index} className="preview-image">
+                  <img src={URL.createObjectURL(img)} alt={`imagen-${index}`} />
+                  <button
+                    className="remove-button"
+                    onClick={() =>
+                      setImagenes((prev) => prev.filter((_, i) => i !== index))
+                    }
+                    title="Eliminar imagen"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="button-group">
+              <button className="primary-button" onClick={handleEnviar}>ENVIAR</button>
+              <button className="secondary-button">Sin anomalías</button>
+          </div>
+          
           {registroEnviado && (
             <div className="mensaje-exito">✔ Registro enviado correctamente</div>
           )}
