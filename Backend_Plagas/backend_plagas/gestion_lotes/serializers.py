@@ -5,3 +5,4 @@ class GestionLoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = GestionLote
         fields = '__all__'
+
