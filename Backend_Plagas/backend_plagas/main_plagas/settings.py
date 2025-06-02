@@ -42,8 +42,8 @@ INSTALLED_APPS = [
 
     #API REST
     'rest_framework',
-
     'corsheaders',
+    'rest_framework_simplejwt',
 
     #My apps
     'usuarios',
@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'tratamientos',
     'reporte_fotos',
     'registro_siembra',
-    'loginAutenticado',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +153,24 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_ALL_ORIGINS = True 
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+from datetime import timedelta
+...
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,  # Si usas el refresh para renovar access, también te da nuevo refresh
+    "BLACKLIST_AFTER_ROTATION": True,  # El refresh viejo ya no es válido
+    "ALGORITHM": "HS256",
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
