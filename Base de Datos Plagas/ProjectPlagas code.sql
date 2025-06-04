@@ -9,8 +9,11 @@ CREATE TABLE Usuario (
     correo VARCHAR(100),
     telefono VARCHAR(20),
     rol VARCHAR(50),
-    contraseña varchar(128),
-    cedula VARCHAR(10)
+    password varchar(128),
+    cedula VARCHAR(10),
+    last_login DATETIME NULL,
+    is_staff TINYINT(1) NOT NULL DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1
 );
 #CREACIÓN TABLA REGISTRO SIEMBRA
 CREATE TABLE RegistroSiembra (
