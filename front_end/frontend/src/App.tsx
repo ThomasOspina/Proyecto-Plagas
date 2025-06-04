@@ -1,97 +1,79 @@
+// App.tsx
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/adminDashboard/NavbarAdmin';
-import Sidebar from './components/adminDashboard/SidebarAdmin';
-import UserTable from './components/adminDashboard/UserTableAdmin';
-import UserForm from './components/adminDashboard/UserFormAdmin';
-import Statistics from './components/adminDashboard/StatisticsAdmin';
-import Settings from './components/adminDashboard/SettingsAdmin';
-import LoginForm from './components/LoginForm'; 
-import Lotes from './components/tecnicoDashboard/verLotes';
-import Siembras from './components/tecnicoDashboard/verSiembras';
-import Tratamientos from './components/tecnicoDashboard/tratamiento';
-import Informes from './components/tecnicoDashboard/informes';
-import NavbarTecnico from './components/tecnicoDashboard/navbarTecnico';
-import SidebarTecnico from './components/tecnicoDashboard/sidebarTecnico';
-import GestionLotes from './components/tecnicoDashboard/gestionLotes';
-import CampesinoView from './components/vistaCampesino/CampesinoView'; // ruta para la vista del campesino
-import LoginCampesino from './components/vistaCampesino/LoginCampesino'; // ruta para el login del campesino
-
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import LoginForm from './components/LoginForm';
+import LoginCampesino from './components/vistaCampesino/LoginCampesino';
+import CampesinoView from './components/vistaCampesino/CampesinoView';
+import AdminDashboard from './components/adminDashboard/AdminDashboard';
+import TecnicoDashboard from './components/tecnicoDashboard/TecnicoDashboard';
+import PrivateRoute from './components/PrivateRoute';
 import './App.css';
 
+// Importaciones de vistas del técnico
+import VerLotes from './components/tecnicoDashboard/verLotes';
+import GestionLotes from './components/tecnicoDashboard/gestionLotes';
+import VerSiembras from './components/tecnicoDashboard/verSiembras';
+import Tratamiento from './components/tecnicoDashboard/tratamiento';
+import Informes from './components/tecnicoDashboard/informes';
+import SettingsTecnico from './components/tecnicoDashboard/settingsTecnico';
+
 const App: React.FC = () => {
-  const [sidebarActive, setSidebarActive] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<'admin' | 'tecnico' | null>(null);
-
-  const toggleSidebar = () => {
-    setSidebarActive(!sidebarActive);
-  };
+  const navigate = useNavigate();
 
   const handleLoginSuccess = (role: 'admin' | 'tecnico') => {
     setUserRole(role);
     setIsLoggedIn(true);
+    if (role === 'admin') {
+      navigate('/admin');
+    } else if (role === 'tecnico') {
+      navigate('/tecnico');
+    }
   };
 
   return (
-    <div>
-      <Routes>
-        {/* Vista pública para Campesino */}
-        <Route path="/campesino-login" element={<LoginCampesino />} />
-        <Route path="/campesino" element={<CampesinoView />} />
+    <Routes>
+      {/* Rutas públicas */}
+      <Route path="/" element={<LoginForm onLoginSuccess={handleLoginSuccess} />} />
+      <Route path="/campesino-login" element={<LoginCampesino />} />
+      <Route path="/campesino" element={<CampesinoView />} />
 
+      {/* Rutas protegidas para admin */}
+      <Route
+        path="/admin/*"
+        element={
+          <PrivateRoute isLoggedIn={isLoggedIn} userRole={userRole} allowedRoles={['admin']}>
+            <AdminDashboard onLogout={() => setIsLoggedIn(false)} />
+          </PrivateRoute>
+        }
+      />
 
-        {/* Vistas protegidas: Admin y Técnico */}
-        {!isLoggedIn ? (
-          <Route path="*" element={<LoginForm onLoginSuccess={handleLoginSuccess} />} />
-        ) : userRole === 'admin' ? (
-          <Route
-            path="*"
-            element={
-              <>
-                <Navbar toggleSidebar={toggleSidebar} />
-                <div className="main-container">
-                  <Sidebar isActive={sidebarActive} onLogout={() => setIsLoggedIn(false)} />
-                  <div className="content">
-                    <Routes>
-                      <Route path="/" element={<Statistics />} />
-                      <Route path="/usuarios" element={<UserTable />} />
-                      <Route path="/agregar-usuario" element={<UserForm />} />
-                      <Route path="/estadisticas" element={<Statistics />} />
-                      <Route path="/ajustes" element={<Settings />} />
-                      <Route path="/informes" element={<Informes />} />
-                    </Routes>
-                  </div>
-                </div>
-              </>
-            }
-          />
-        ) : (
-          <Route
-            path="*"
-            element={
-              <>
-                <NavbarTecnico toggleSidebar={toggleSidebar} />
-                <div className="main-container">
-                  <SidebarTecnico isActive={sidebarActive} onLogout={() => setIsLoggedIn(false)} />
-                  <div className="content">
-                    <Routes>
-                      <Route path="/" element={<Lotes />} />
-                      <Route path="/gestionLotes" element={<GestionLotes />} />
-                      <Route path="/siembras" element={<Siembras />} />
-                      <Route path="/tratamientos" element={<Tratamientos />} />
-                      <Route path="/informes" element={<Informes />} />
-                      <Route path="/ajustes" element={<Settings />} />
-                    </Routes>
-                  </div>
-                </div>
-              </>
-            }
-          />
-        )}
-      </Routes>
-    </div>
+      {/* Rutas protegidas para técnico */}
+      <Route
+        path="/tecnico/*"
+        element={
+          <PrivateRoute isLoggedIn={isLoggedIn} userRole={userRole} allowedRoles={['tecnico']}>
+            <TecnicoDashboard onLogout={() => setIsLoggedIn(false)} />
+          </PrivateRoute>
+        }
+      >
+        <Route index element={<VerLotes />} />
+        <Route path="gestionLotes" element={<GestionLotes />} />
+        <Route path="siembras" element={<VerSiembras />} />
+        <Route path="tratamientos" element={<Tratamiento />} />
+        <Route path="informes" element={<Informes />} />
+        <Route path="ajustes" element={<SettingsTecnico />} />
+      </Route>
+    </Routes>
   );
 };
 
 export default App;
+
+
+
+
+
+
+

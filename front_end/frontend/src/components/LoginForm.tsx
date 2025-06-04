@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Necesario para redireccionar
 import '../styles/LoginForm.css';
+import { loginUsuario } from '../api/auth';
 
 interface LoginFormProps {
   onLoginSuccess: (role: 'admin' | 'tecnico') => void;
@@ -11,18 +12,36 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); //  Hook de React Router
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
 
-   
-    if (cedula === '1234' && password === 'admin') {
-      onLoginSuccess('admin');
-    } else if (cedula === '5678' && password === 'tecnico') {
-      onLoginSuccess('tecnico');
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const data = await loginUsuario(cedula, password);
+
+    localStorage.setItem('accessToken', data.access);
+    localStorage.setItem('refreshToken', data.refresh);
+    localStorage.setItem('usuarioRol', data.rol);
+
+    // Llama al callback por si se usa
+    onLoginSuccess(data.rol.toLowerCase() as 'admin' | 'tecnico');
+
+    // Redirige inmediatamente
+    if (data.rol.toLowerCase() === 'admin') {
+      navigate('/admin');
+    } else if (data.rol.toLowerCase() === 'tecnico') {
+      navigate('/tecnico');
     } else {
-      alert('Credenciales incorrectas');
+      alert('Rol no reconocido');
     }
-  };
+
+  } catch (error: any) {
+    alert(error.message || 'Error al iniciar sesión');
+  }
+};
+
+
 
   return (
     <section className="seccion-login">

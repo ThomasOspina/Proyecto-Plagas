@@ -1,27 +1,30 @@
 from rest_framework import serializers
-from .models import Usuario
 from django.contrib.auth.hashers import make_password
+from .models import Usuario
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}
 
-    def validate_correo(self, value):
-        if Usuario.objects.filter(correo=value).exists():
-            raise serializers.ValidationError("Este correo ya está registrado.")
-        return value
-
-    def validate_cedula(self, value):
-        if not value.isdigit() or len(value) != 10:
-            raise serializers.ValidationError("La cédula debe tener exactamente 10 dígitos.")
-        return value
-
-    def validate_rol(self, value):
-        if value.lower() not in ['admin', 'tecnico', 'agricultor']:
-            raise serializers.ValidationError("El rol debe ser 'admin', 'tecnico' o 'agricultor'.")
-        return value
-    
     def create(self, validated_data):
-        validated_data['contraseña'] = make_password(validated_data['contraseña'])
+        rol = validated_data.get('rol', '').lower()
+        password = validated_data.get('password')
+
+        if rol != 'campesino' and not password:
+            raise serializers.ValidationError({'password': 'Este campo es obligatorio para usuarios que no son campesinos.'})
+
+        if password:
+            validated_data['password'] = make_password(password)
+
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'password' in validated_data and validated_data['password']:
+            validated_data['password'] = make_password(validated_data['password'])
+        return super().update(instance, validated_data)
+
+
+
+

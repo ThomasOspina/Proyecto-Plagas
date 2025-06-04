@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DB_Proyecto_Plagas',
         'USER': 'root',
-        'PASSWORD': 'juanjo2705',
+        'PASSWORD': 'labizcadeconi1',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -164,7 +164,6 @@ REST_FRAMEWORK = {
 }
 
 from datetime import timedelta
-...
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
@@ -173,4 +172,11 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,  # El refresh viejo ya no es válido
     "ALGORITHM": "HS256",
     "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+AUTH_USER_MODEL = 'usuarios.Usuario'
+USERNAME_FIELD = 'cedula'
+
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'id_usuario',  # Está bien
 }
