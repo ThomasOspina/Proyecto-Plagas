@@ -1,5 +1,5 @@
 // App.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import LoginCampesino from './components/vistaCampesino/LoginCampesino';
@@ -9,27 +9,37 @@ import TecnicoDashboard from './components/tecnicoDashboard/TecnicoDashboard';
 import PrivateRoute from './components/PrivateRoute';
 import './App.css';
 
-// Importaciones de vistas del técnico
-import VerLotes from './components/tecnicoDashboard/verLotes';
-import GestionLotes from './components/tecnicoDashboard/gestionLotes';
-import VerSiembras from './components/tecnicoDashboard/verSiembras';
-import Tratamiento from './components/tecnicoDashboard/tratamiento';
-import Informes from './components/tecnicoDashboard/informes';
-import SettingsTecnico from './components/tecnicoDashboard/settingsTecnico';
-
 const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState<'admin' | 'tecnico' | null>(null);
   const navigate = useNavigate();
 
+  // Carga inicial desde localStorage
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => localStorage.getItem('isLoggedIn') === 'true');
+  const [userRole, setUserRole] = useState<'admin' | 'tecnico' | null>(() => {
+    const storedRole = localStorage.getItem('userRole');
+    return storedRole === 'admin' || storedRole === 'tecnico' ? storedRole : null;
+  });
+
+  // Manejo del login
   const handleLoginSuccess = (role: 'admin' | 'tecnico') => {
-    setUserRole(role);
     setIsLoggedIn(true);
+    setUserRole(role);
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userRole', role);
+
     if (role === 'admin') {
       navigate('/admin');
     } else if (role === 'tecnico') {
       navigate('/tecnico');
     }
+  };
+
+  // Manejo del logout
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserRole(null);
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userRole');
+    navigate('/');
   };
 
   return (
@@ -39,37 +49,32 @@ const App: React.FC = () => {
       <Route path="/campesino-login" element={<LoginCampesino />} />
       <Route path="/campesino" element={<CampesinoView />} />
 
-      {/* Rutas protegidas para admin */}
+      {/* Admin privado */}
       <Route
         path="/admin/*"
         element={
           <PrivateRoute isLoggedIn={isLoggedIn} userRole={userRole} allowedRoles={['admin']}>
-            <AdminDashboard onLogout={() => setIsLoggedIn(false)} />
+            <AdminDashboard onLogout={handleLogout} />
           </PrivateRoute>
         }
       />
 
-      {/* Rutas protegidas para técnico */}
+      {/* Técnico privado */}
       <Route
         path="/tecnico/*"
         element={
           <PrivateRoute isLoggedIn={isLoggedIn} userRole={userRole} allowedRoles={['tecnico']}>
-            <TecnicoDashboard onLogout={() => setIsLoggedIn(false)} />
+            <TecnicoDashboard onLogout={handleLogout} />
           </PrivateRoute>
         }
-      >
-        <Route index element={<VerLotes />} />
-        <Route path="gestionLotes" element={<GestionLotes />} />
-        <Route path="siembras" element={<VerSiembras />} />
-        <Route path="tratamientos" element={<Tratamiento />} />
-        <Route path="informes" element={<Informes />} />
-        <Route path="ajustes" element={<SettingsTecnico />} />
-      </Route>
+      />
     </Routes>
   );
 };
 
 export default App;
+
+
 
 
 

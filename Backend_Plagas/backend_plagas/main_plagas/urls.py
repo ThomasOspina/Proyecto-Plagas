@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/usuarios/', include('usuarios.urls')),
     path('api/registro-siembra/', include('registro_siembra.urls')),
-    path('api/gestion-lote/', include('gestion_lotes.urls')),
+    path('api/gestion-lotes/', include('gestion_lotes.urls')),
     path('api/monitoreo-plagas/', include('monitoreo.urls')),
     path('api/reporte-fotos/', include('reporte_fotos.urls')),
     path('api/api-plagas/', include('apiplagas.urls')),
@@ -36,5 +36,4 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
-
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

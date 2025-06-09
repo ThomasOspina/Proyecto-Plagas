@@ -70,6 +70,14 @@ def eliminar_usuario_por_cedula(request, cedula):
     except Usuario.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)    
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def obtener_usuarios_publicos(request):
+    usuarios = Usuario.objects.all()
+    serializer = UsuarioSerializer(usuarios, many=True)
+    return Response(serializer.data)
+
+
 class RegistroUsuarioView(APIView):
     permission_classes = [AllowAny]
     

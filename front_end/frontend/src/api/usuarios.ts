@@ -1,10 +1,10 @@
+// src/api/usuario.ts
 import api from './axiosConfig';
-// Asegúrate de que este archivo esté en la carpeta src/api/
 
-// Función para crear usuario
+// ✅ Usar la ruta de registro personalizada que sí permite POST sin token
 export const crearUsuario = async (usuarioData: any) => {
   try {
-    const response = await api.post('usuarios/', usuarioData);
+    const response = await api.post('usuarios/registro/', usuarioData);
     console.log('✅ Usuario creado:', response.data);
     return response.data;
   } catch (error: any) {
@@ -14,15 +14,24 @@ export const crearUsuario = async (usuarioData: any) => {
   }
 };
 
-// Nueva función para obtener todos los usuarios
-export const obtenerUsuarios = async () => {
+export const obtenerUsuariosPublicos = async () => {
   try {
-    const response = await api.get('usuarios/');
-    console.log('👥 Usuarios obtenidos:', response.data);
+    const response = await api.get('usuarios/public/');
+    console.log('👥 Usuarios públicos obtenidos:', response.data);
     return response.data;
   } catch (error: any) {
-    console.error('💥 Error al obtener usuarios:', error);
-    throw new Error('Error al obtener usuarios');
+    console.error('💥 Error al obtener usuarios públicos:', error);
+    throw new Error('Error al obtener usuarios públicos');
   }
-}
+};
+
+export const obtenerUsuarios = async () => {
+  try {
+    const response = await api.get('usuarios/public/');
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error('❌ Error al obtener usuarios:', error);
+    throw error;
+  }
+};
 

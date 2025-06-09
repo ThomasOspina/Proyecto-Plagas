@@ -3,6 +3,8 @@ from .views import UsuarioViewSet, login_usuario, RegistroUsuarioView
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import eliminar_usuario_por_cedula
+from .views import obtener_usuarios_publicos
+
 
 
 router = DefaultRouter()
@@ -14,6 +16,7 @@ urlpatterns = [
     path('login/', login_usuario, name='login_usuario'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('eliminar/<str:cedula>/', eliminar_usuario_por_cedula, name='eliminar_usuario'),
+    path('public/', obtener_usuarios_publicos, name='usuarios_publicos'),
     path('', include(router.urls)),
 ]
 

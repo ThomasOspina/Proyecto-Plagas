@@ -8,3 +8,4 @@ router.register(r'', GestionLoteViewSet, basename='gestion_lote')
 urlpatterns = [
     path('', include(router.urls)),
 ]
+

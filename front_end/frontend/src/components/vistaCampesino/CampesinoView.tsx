@@ -1,14 +1,64 @@
-import React, { useState } from 'react';
+// src/components/CampesinoView.tsx
+import React, { useState, useEffect } from 'react';
 import './CampesinoView.css';
+import { crearMonitoreo, crearFotoMonitoreo } from '../../api/monitoreoPlagas';
+import { obtenerSiembras } from '../../api/registroSiembra';
 
-const CampesinoView = () => {
+const CampesinoView: React.FC = () => {
   const [registroEnviado, setRegistroEnviado] = useState(false);
   const [imagenes, setImagenes] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [siembras, setSiembras] = useState<any[]>([]);
+  const [registroSeleccionado, setRegistroSeleccionado] = useState<number | ''>('');
 
-  const handleEnviar = () => {
-    setRegistroEnviado(true);
-    setTimeout(() => setRegistroEnviado(false), 3000);
+  useEffect(() => {
+    const cargarSiembras = async () => {
+      try {
+        const data = await obtenerSiembras();
+        setSiembras(data);
+      } catch (error) {
+        console.error('Error cargando siembras:', error);
+      }
+    };
+    cargarSiembras();
+  }, []);
+
+  const handleEnviar = async () => {
+    if (!registroSeleccionado) {
+      alert('Debe seleccionar un lote.');
+      return;
+    }
+
+    if (imagenes.length === 0) {
+      alert('Debe subir al menos una imagen.');
+      return;
+    }
+
+    try {
+      for (const img of imagenes) {
+        await crearFotoMonitoreo(registroSeleccionado, img);
+      }
+      setRegistroEnviado(true);
+      setImagenes([]);
+      setTimeout(() => setRegistroEnviado(false), 3000);
+    } catch (err: any) {
+      alert(`❌ Error al registrar monitoreo con imagen: ${err.message}`);
+    }
+  };
+
+  const handleSinAnomalias = async () => {
+    if (!registroSeleccionado) {
+      alert('Debe seleccionar un lote.');
+      return;
+    }
+
+    try {
+      await crearMonitoreo(registroSeleccionado, 'Sin anomalías', 'Ninguna observación registrada');
+      setRegistroEnviado(true);
+      setTimeout(() => setRegistroEnviado(false), 3000);
+    } catch (err: any) {
+      alert(`❌ Error al registrar sin anomalías: ${err.message}`);
+    }
   };
 
   const handleSeleccionImagenes = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +89,22 @@ const CampesinoView = () => {
       </header>
 
       <main className="campesino-main">
+        <div className="selector-lote">
+          <label htmlFor="registroSelect">Selecciona lote:</label>
+          <select
+            id="registroSelect"
+            value={registroSeleccionado}
+            onChange={(e) => setRegistroSeleccionado(Number(e.target.value))}
+          >
+            <option value="">-- Elige un lote --</option>
+            {siembras.map((s) => (
+              <option key={s.id_registro} value={s.id_registro}>
+                {`Lote ${s.numeroLote}`}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div
           className={`upload-card drop-zone ${isDragging ? 'dragging' : ''}`}
           onDragOver={(e) => {
@@ -48,7 +114,7 @@ const CampesinoView = () => {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
         >
-          <h2 className="upload-title">Sube tu imágen del cultivo</h2>
+          <h2 className="upload-title">Sube tu imagen del cultivo</h2>
 
           <label htmlFor="upload" className="upload-button">
             Cargar imágenes
@@ -84,10 +150,12 @@ const CampesinoView = () => {
           )}
 
           <div className="button-group">
-              <button className="primary-button" onClick={handleEnviar}>ENVIAR</button>
-              <button className="secondary-button">Sin anomalías</button>
+            <button className="primary-button" onClick={handleEnviar}>ENVIAR</button>
+            <button className="secondary-button" onClick={handleSinAnomalias}>
+              Sin anomalías
+            </button>
           </div>
-          
+
           {registroEnviado && (
             <div className="mensaje-exito">✔ Registro enviado correctamente</div>
           )}
@@ -107,3 +175,6 @@ const CampesinoView = () => {
 };
 
 export default CampesinoView;
+
+
+
