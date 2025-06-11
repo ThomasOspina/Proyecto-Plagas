@@ -5,7 +5,7 @@ import NavbarTecnico from './navbarTecnico';
 import SidebarTecnico from './sidebarTecnico';
 
 // Importa aquí las vistas hijas que usas
-import VerLotes from './verLotes';
+import VerLotes from './DiagnosticoEnfermedades';
 import GestionLotes from './gestionLotes';
 import VerSiembras from './verSiembras';
 import Tratamiento from './tratamiento';

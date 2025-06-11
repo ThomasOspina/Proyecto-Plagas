@@ -9,13 +9,18 @@ from .crophealth_service import analizar_imagen_crophealth
 from reporte_fotos.models import ReporteFotos
 import os
 from django.conf import settings
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
+
 
 class ApiPlagasViewSet(viewsets.ModelViewSet):
     queryset = ApiPlagas.objects.all()
     serializer_class = ApiPlagasSerializer
+    permission_classes = [AllowAny]
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def guardar_diagnostico_crophealth(request):
     reporte_id = request.data.get('reporteFotos')  # ID del reporte desde el cuerpo del POST
 
@@ -66,7 +71,9 @@ def guardar_diagnostico_crophealth(request):
         return Response({
             'id_api': api_result.id_api,
             'planta': api_result.nombrePlanta,
-            'enfermedad': api_result.enfermedadPlanta
+            'planta_nombre_cientifico': api_result.nombreCientificoPlanta,
+            'enfermedad': api_result.enfermedadPlanta,
+            'enfermedad_nombre_cientifico': api_result.nombreCientificoEnfermedad
         }, status=status.HTTP_201_CREATED)
 
     except Exception as e:

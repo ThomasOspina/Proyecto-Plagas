@@ -23,7 +23,7 @@ const SidebarTecnico: React.FC<SidebarProps> = ({ isActive, onLogout }) => {
               <rect x="14" y="14" width="7" height="7" rx="1" ry="1"></rect>
               <rect x="3" y="14" width="7" height="7" rx="1" ry="1"></rect>
             </svg>
-            Ver Lotes
+            Diagnóstico
           </Link>
         </li>
         <li>

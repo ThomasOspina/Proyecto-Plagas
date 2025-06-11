@@ -178,5 +178,5 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 USERNAME_FIELD = 'cedula'
 
 SIMPLE_JWT = {
-    'USER_ID_FIELD': 'id_usuario',  # Está bien
+    'USER_ID_FIELD': 'id_usuario', 
 }
