@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { obtenerUsuariosPublicos } from '../../api/usuarios'; // ajusta la ruta según sea necesario
+import { obtenerUsuariosPublicos } from '../../api/usuarios';
 
 interface Usuario {
   id_usuario: number;

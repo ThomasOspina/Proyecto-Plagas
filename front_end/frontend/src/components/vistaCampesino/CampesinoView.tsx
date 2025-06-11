@@ -1,5 +1,5 @@
-// src/components/CampesinoView.tsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CampesinoView.css';
 import { crearMonitoreo, crearFotoMonitoreo } from '../../api/monitoreoPlagas';
 import { obtenerSiembras } from '../../api/registroSiembra';
@@ -10,6 +10,7 @@ const CampesinoView: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [siembras, setSiembras] = useState<any[]>([]);
   const [registroSeleccionado, setRegistroSeleccionado] = useState<number | ''>('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const cargarSiembras = async () => {
@@ -159,6 +160,24 @@ const CampesinoView: React.FC = () => {
           {registroEnviado && (
             <div className="mensaje-exito">✔ Registro enviado correctamente</div>
           )}
+
+          {/* Botón de cerrar sesión al final del formulario */}
+          <div style={{ marginTop: '20px', textAlign: 'center' }}>
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              style={{
+                backgroundColor: '#e53935',
+                color: '#fff',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              Cerrar sesión
+            </button>
+          </div>
         </div>
 
         <section className="info-section">
@@ -175,6 +194,8 @@ const CampesinoView: React.FC = () => {
 };
 
 export default CampesinoView;
+
+
 
 
 

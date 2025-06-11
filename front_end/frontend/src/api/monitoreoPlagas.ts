@@ -37,4 +37,11 @@ export const crearFotoMonitoreo = async (registroId: number, imagen: File) => {
   }
 };
 
-
+export const obtenerMonitoreoPlagas = async () => {
+  try {
+    const response = await api.get('monitoreo-plagas/');
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.detail || 'Error al obtener monitoreos');
+  }
+};

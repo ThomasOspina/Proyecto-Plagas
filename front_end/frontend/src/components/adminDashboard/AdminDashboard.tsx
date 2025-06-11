@@ -7,6 +7,8 @@ import UserTable from './UserTableAdmin';
 import UserForm from './UserFormAdmin';
 import Statistics from './StatisticsAdmin';
 import Settings from './SettingsAdmin';
+import VerInformesAdmin from './VerInformesAdmin';
+
 
 // Define las props que recibe
 interface AdminDashboardProps {
@@ -31,6 +33,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             <Route path="usuarios" element={<UserTable />} />
             <Route path="agregar-usuario" element={<UserForm />} />
             <Route path="estadisticas" element={<Statistics />} />
+            <Route path="informes" element={<VerInformesAdmin />} />
             <Route path="ajustes" element={<Settings />} />
           </Routes>
         </div>

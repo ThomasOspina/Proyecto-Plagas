@@ -9,7 +9,7 @@ import VerLotes from './DiagnosticoEnfermedades';
 import GestionLotes from './gestionLotes';
 import VerSiembras from './verSiembras';
 import Tratamiento from './tratamiento';
-import Informes from './informes';
+import Informes from './VerInformesTecnico';
 import SettingsTecnico from './settingsTecnico';
 
 interface TecnicoDashboardProps {

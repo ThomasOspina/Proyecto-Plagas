@@ -17,7 +17,6 @@ const LoginCampesino: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        // Se envía un password vacío para que el backend no dé error
         body: JSON.stringify({ cedula, password: "" }),
       });
 
@@ -65,10 +64,30 @@ const LoginCampesino: React.FC = () => {
         <button type="submit" disabled={loading}>
           {loading ? 'Ingresando...' : 'Entrar'}
         </button>
+
+        {/* Botón de volver en rojo */}
+        <button
+          type="button"
+          className="close-button"
+          onClick={() => navigate('/')}
+          style={{
+            marginTop: '10px',
+            backgroundColor: '#e53935',
+            color: '#fff',
+            border: 'none',
+            padding: '8px 16px',
+            borderRadius: '5px',
+            cursor: 'pointer',
+          }}
+        >
+          Volver
+        </button>
       </form>
     </div>
   );
 };
 
 export default LoginCampesino;
+
+
 

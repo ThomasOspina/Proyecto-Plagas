@@ -1,6 +1,5 @@
-// src/components/tecnicoDashboard/tratamiento.tsx
 import React, { useState, useEffect } from 'react';
-import { crearPlanTratamiento, obtenerPlanes } from '../../api/tratamientos';
+import { crearPlanTratamiento } from '../../api/tratamientos';
 import { obtenerUsuarios } from '../../api/usuarios';
 import { obtenerDiagnosticos } from '../../api/apiplagas';
 
@@ -24,7 +23,6 @@ const Tratamiento: React.FC = () => {
   const [informe, setInforme] = useState('');
   const [diagnosticoId, setDiagnosticoId] = useState<number | ''>('');
   const [usuarioId, setUsuarioId] = useState<number | ''>('');
-  const [planesExistentes, setPlanesExistentes] = useState<any[]>([]);
 
   useEffect(() => {
     const normalizeArray = (data: any): any[] => {
@@ -53,19 +51,8 @@ const Tratamiento: React.FC = () => {
       }
     };
 
-    const fetchPlanes = async () => {
-      try {
-        const res = await obtenerPlanes();
-        const list = normalizeArray(res);
-        setPlanesExistentes(list);
-      } catch (error) {
-        console.error('Error al cargar tratamientos:', error);
-      }
-    };
-
     fetchDiagnosticos();
     fetchUsuarios();
-    fetchPlanes();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -95,9 +82,9 @@ const Tratamiento: React.FC = () => {
   };
 
   return (
-    <section style={{ maxWidth: '600px', margin: '0 auto' }}>
-      <h2>Planificar Tratamiento</h2>
-      <form onSubmit={handleSubmit}>
+    <section style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
+      <h2 style={{ marginBottom: '20px' }}>🧪 Planificar Tratamiento</h2>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         <label>Diagnóstico:</label>
         <select
           value={diagnosticoId}
@@ -158,24 +145,25 @@ const Tratamiento: React.FC = () => {
           required
         />
 
-        <button type="submit" style={{ marginTop: '10px' }}>
+        <button type="submit" style={{
+          marginTop: '10px',
+          backgroundColor: '#2e7d32',
+          color: 'white',
+          padding: '10px 15px',
+          fontSize: '1rem',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer'
+        }}>
           Planificar
         </button>
       </form>
-
-      <h3 style={{ marginTop: '40px' }}>Tratamientos ya planificados</h3>
-      <ul>
-        {planesExistentes.map(plan => (
-          <li key={plan.id_planificacion}>
-            [{plan.id_planificacion}] {plan.informetratamiento} — {plan.fecha_inicio} a {plan.fecha_fin}
-          </li>
-        ))}
-      </ul>
     </section>
   );
 };
 
 export default Tratamiento;
+
 
 
 

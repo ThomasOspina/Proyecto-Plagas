@@ -6,15 +6,17 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework import status
 from datetime import date
-
-# Importar correctamente desde el módulo reporte_fotos
 from reporte_fotos.models import ReporteFotos
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, parser_classes, permission_classes
 
 class MonitoreoPlagasViewSet(viewsets.ModelViewSet):
     queryset = MonitoreoPlagas.objects.all()
     serializer_class = MonitoreoPlagasSerializer
+    permission_classes = [AllowAny] 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 @parser_classes([MultiPartParser])
 def crear_monitoreo_con_foto(request):
     try:

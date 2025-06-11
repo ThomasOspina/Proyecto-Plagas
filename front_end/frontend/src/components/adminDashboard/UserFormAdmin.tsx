@@ -13,18 +13,7 @@ const UserForm = () => {
     cedula: ''
   });
 
-  const llenarDatosPrueba = () => {
-    const timestamp = Date.now();
-    setFormData({
-      nombre: 'Juan',
-      apellido: 'Pérez',
-      correo: `juan.perez.${timestamp}@email.com`,
-      telefono: '1234567890',
-      rol: 'admin',
-      password: '123456789',
-      cedula: `${timestamp.toString().slice(-8)}`
-    });
-  };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -62,20 +51,8 @@ const UserForm = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: '10px' }}>
-        <button
-          onClick={llenarDatosPrueba}
-          style={{
-            marginRight: '10px',
-            background: '#007bff',
-            color: 'white',
-            padding: '5px 10px',
-            border: 'none',
-            borderRadius: '3px'
-          }}
-        >
-          🔧 Llenar datos de prueba
-        </button>
+      <div>
+        <h2>Crear Usuario</h2>
       </div>
 
       <form onSubmit={handleSubmit}>
