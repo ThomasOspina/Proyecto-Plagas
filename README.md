@@ -9,8 +9,11 @@ Permite monitorear plagas, generar diagnósticos, planificar tratamientos y admi
 
 📦 Sistema-Plagas
 ├── Backend_Plagas/ # Proyecto backend con Django
+
 ├── front_end/ # Proyecto frontend con React
+
 ├── Base de Datos Plagas/ # Script o modelo de la base de datos (MySQL Workbench)
+
 └── Especificación de Requisitos Plagas/ # Documento de requisitos funcionales
 
 
