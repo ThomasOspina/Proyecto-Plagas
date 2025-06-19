@@ -87,3 +87,17 @@ class RegistroUsuarioView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def actualizar_usuario_publico(request, id):
+    try:
+        usuario = Usuario.objects.get(pk=id)
+    except Usuario.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UsuarioSerializer(usuario, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'mensaje': 'Usuario actualizado correctamente', 'usuario': serializer.data})
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

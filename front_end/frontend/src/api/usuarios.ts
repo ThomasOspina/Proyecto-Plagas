@@ -35,3 +35,23 @@ export const obtenerUsuarios = async () => {
   }
 };
 
+export const eliminarUsuario = async (cedula: string) => {
+  try {
+    const response = await api.delete(`usuarios/eliminar/${cedula}/`);
+    return response.data;
+  } catch (error: any) {
+    console.error('❌ Error al eliminar usuario:', error);
+    throw error;
+  }
+};
+
+export const actualizarUsuario = async (id: number, usuarioData: any) => {
+  try {
+    const response = await api.put(`usuarios/publico/${id}/`, usuarioData);
+    return response.data;
+  } catch (error: any) {
+    console.error('❌ Error al actualizar usuario:', error);
+    throw error;
+  }
+};
+

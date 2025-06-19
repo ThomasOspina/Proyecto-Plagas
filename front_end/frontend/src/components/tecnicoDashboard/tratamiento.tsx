@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { crearPlanTratamiento } from '../../api/tratamientos';
+import {
+  crearPlanTratamiento,
+  obtenerPlanes,
+  eliminarPlan,
+  actualizarPlan,
+  PlanTratamiento
+} from '../../api/tratamientos';
 import { obtenerUsuarios } from '../../api/usuarios';
 import { obtenerDiagnosticos } from '../../api/apiplagas';
 
@@ -18,11 +24,14 @@ interface Usuario {
 const Tratamiento: React.FC = () => {
   const [diagnosticos, setDiagnosticos] = useState<Diagnostico[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [planes, setPlanes] = useState<PlanTratamiento[]>([]);
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
   const [informe, setInforme] = useState('');
   const [diagnosticoId, setDiagnosticoId] = useState<number | ''>('');
   const [usuarioId, setUsuarioId] = useState<number | ''>('');
+  const [editando, setEditando] = useState<number | null>(null);
+  const [formEdit, setFormEdit] = useState<PlanTratamiento | null>(null);
 
   useEffect(() => {
     const normalizeArray = (data: any): any[] => {
@@ -32,27 +41,22 @@ const Tratamiento: React.FC = () => {
       return arrays[0] || [];
     };
 
-    const fetchDiagnosticos = async () => {
+    const fetchAll = async () => {
       try {
-        const res = await obtenerDiagnosticos();
-        const list = normalizeArray(res);
-        setDiagnosticos(list);
+        const [resDiag, resUsers, resPlanes] = await Promise.all([
+          obtenerDiagnosticos(),
+          obtenerUsuarios(),
+          obtenerPlanes()
+        ]);
+        setDiagnosticos(normalizeArray(resDiag));
+        setUsuarios(resUsers);
+        setPlanes(normalizeArray(resPlanes));
       } catch (error) {
-        console.error('Error al cargar diagnósticos:', error);
+        console.error('Error al cargar datos:', error);
       }
     };
 
-    const fetchUsuarios = async () => {
-      try {
-        const list = await obtenerUsuarios();
-        setUsuarios(list);
-      } catch (error) {
-        console.error('Error al cargar usuarios:', error);
-      }
-    };
-
-    fetchDiagnosticos();
-    fetchUsuarios();
+    fetchAll();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -76,8 +80,45 @@ const Tratamiento: React.FC = () => {
       setInforme('');
       setDiagnosticoId('');
       setUsuarioId('');
+      const res = await obtenerPlanes();
+      setPlanes(res);
     } catch (err: any) {
       alert('❌ Error al guardar: ' + err.message);
+    }
+  };
+
+  const handleEdit = (plan: PlanTratamiento) => {
+    setEditando(plan.id_planificacion);
+    setFormEdit(plan);
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!formEdit) return;
+    setFormEdit({ ...formEdit, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdate = async () => {
+    if (!formEdit) return;
+    try {
+      await actualizarPlan(formEdit.id_planificacion, formEdit);
+      alert('✅ Tratamiento actualizado');
+      setEditando(null);
+      const res = await obtenerPlanes();
+      setPlanes(res);
+    } catch (error: any) {
+      alert('❌ Error al actualizar: ' + error.message);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('¿Eliminar este tratamiento?')) return;
+    try {
+      await eliminarPlan(id);
+      alert('🗑️ Tratamiento eliminado');
+      const res = await obtenerPlanes();
+      setPlanes(res);
+    } catch (error: any) {
+      alert('❌ Error al eliminar: ' + error.message);
     }
   };
 
@@ -114,26 +155,16 @@ const Tratamiento: React.FC = () => {
         </select>
 
         <label>Fecha de inicio:</label>
-        <input
-          type="date"
-          value={fechaInicio}
-          onChange={e => setFechaInicio(e.target.value)}
-          required
-        />
+        <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)} required />
 
         <label>Fecha de fin:</label>
-        <input
-          type="date"
-          value={fechaFin}
-          onChange={e => setFechaFin(e.target.value)}
-          required
-        />
+        <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)} required />
 
         <label>Informe del tratamiento:</label>
         <textarea
           value={informe}
           onChange={e => setInforme(e.target.value)}
-          rows={5}
+          rows={6}
           style={{
             width: '100%',
             padding: '8px',
@@ -141,28 +172,106 @@ const Tratamiento: React.FC = () => {
             border: '1px solid #ccc',
             resize: 'vertical',
           }}
-          placeholder="Describe el tratamiento aplicado..."
           required
         />
 
-        <button type="submit" style={{
-          marginTop: '10px',
-          backgroundColor: '#2e7d32',
-          color: 'white',
-          padding: '10px 15px',
-          fontSize: '1rem',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer'
-        }}>
+        <button
+          type="submit"
+          style={{
+            marginTop: '10px',
+            backgroundColor: '#2e7d32',
+            color: 'white',
+            padding: '10px 15px',
+            fontSize: '1rem',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer'
+          }}
+        >
           Planificar
         </button>
       </form>
+
+      <h2 style={{ marginTop: '2rem' }}>📋 Tratamientos Registrados</h2>
+      <table style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+        <thead style={{ backgroundColor: '#eee' }}>
+          <tr>
+            <th style={{ width: '120px' }}>Inicio</th>
+            <th style={{ width: '120px' }}>Fin</th>
+            <th>Informe</th>
+            <th style={{ width: '90px' }}>⚙️</th>
+          </tr>
+        </thead>
+        <tbody>
+          {planes.map(plan => (
+            <tr key={plan.id_planificacion}>
+              <td>
+                {editando === plan.id_planificacion ? (
+                  <input
+                    type="date"
+                    name="fecha_inicio"
+                    value={formEdit?.fecha_inicio || ''}
+                    onChange={handleEditChange}
+                    style={{ width: '100%' }}
+                  />
+                ) : (
+                  plan.fecha_inicio
+                )}
+              </td>
+              <td>
+                {editando === plan.id_planificacion ? (
+                  <input
+                    type="date"
+                    name="fecha_fin"
+                    value={formEdit?.fecha_fin || ''}
+                    onChange={handleEditChange}
+                    style={{ width: '100%' }}
+                  />
+                ) : (
+                  plan.fecha_fin
+                )}
+              </td>
+              <td>
+                {editando === plan.id_planificacion ? (
+                  <textarea
+                    name="informetratamiento"
+                    value={formEdit?.informetratamiento || ''}
+                    onChange={handleEditChange}
+                    rows={3}
+                    style={{ width: '100%', resize: 'vertical' }}
+                  />
+                ) : (
+                  <div style={{ maxHeight: '4.5em', overflow: 'auto', whiteSpace: 'pre-wrap' }}>
+                    {plan.informetratamiento}
+                  </div>
+                )}
+              </td>
+              <td style={{ textAlign: 'center' }}>
+                {editando === plan.id_planificacion ? (
+                  <>
+                    <button onClick={handleUpdate} title="Guardar" style={{ marginRight: '4px' }}>💾</button>
+                    <button onClick={() => setEditando(null)} title="Cancelar">❌</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={() => handleEdit(plan)} title="Editar" style={{ marginRight: '4px' }}>✏️</button>
+                    <button onClick={() => handleDelete(plan.id_planificacion)} title="Eliminar">🗑️</button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </section>
   );
 };
 
 export default Tratamiento;
+
+
+
+
 
 
 
