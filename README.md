@@ -13,9 +13,6 @@ Permite monitorear plagas, generar diagnósticos, planificar tratamientos y admi
 ├── Base de Datos Plagas/ # Script o modelo de la base de datos (MySQL Workbench)
 └── Especificación de Requisitos Plagas/ # Documento de requisitos funcionales
 
-yaml
-Copiar
-Editar
 
 ---
 
@@ -79,21 +76,18 @@ En la carpeta **"Especificación de Requisitos Plagas"** se encuentra la documen
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu_usuario/tu_repositorio.git
+1. git clone https://github.com/tu_usuario/tu_repositorio.git
 cd tu_repositorio
+
 2. Backend (Django)
-bash
-Copiar
-Editar
 cd Backend_Plagas
 python -m venv venv
 source venv/bin/activate  # o venv\Scripts\activate en Windows
 pip install -r requirements.txt
 python manage.py runserver
+
 3. Frontend (React)
 bash
-Copiar
-Editar
 cd front_end
 npm install
 npm run dev  # o npm start
