@@ -8,6 +8,7 @@ Permite monitorear plagas, generar diagnósticos, planificar tratamientos y admi
 ## 📁 Estructura del Proyecto
 
 📦 Sistema-Plagas
+
 ├── Backend_Plagas/ # Proyecto backend con Django
 
 ├── front_end/ # Proyecto frontend con React
